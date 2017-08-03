@@ -1,5 +1,10 @@
 from datetime import datetime, timedelta
 
+'''
+Functions are from the url : 
+https://stackoverflow.com/questions/29853390/python-trouble-converting-milliseconds-to-datetime-and-back
+'''
+
 def timestamp_millis(utc_time, epoch=datetime(1970, 1, 1)):
     """Return milliseconds since Epoch as integer."""
     td = utc_time - epoch
