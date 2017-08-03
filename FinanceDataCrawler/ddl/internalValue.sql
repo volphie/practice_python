@@ -28,5 +28,5 @@ from (
 where state.TICKER = price.TICKER
 and state.IV > price.CLOSE_PRICE
 and state.IV > 0
--- and state.TICKER = '001720'
+and state.TICKER = '001720'
 order by DIFF DESC;
