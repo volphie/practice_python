@@ -53,3 +53,13 @@ CREATE TABLE `stockanalysis`.`financial_index2` (
   `NO_OF_STOCKS` decimal(12,1) DEFAULT NULL COMMENT '발행주식수\n',
   PRIMARY KEY (`FIN_YEAR`,`TICKER`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `stockanalysis`.`macro_economic_index` (
+  `INDEX_ID` varchar(10) NOT NULL COMMENT '지표 ID',
+  `OBS_TIME` DATETIME NOT NULL COMMENT '관측 기준 시간',
+  `FREQ_TYPE` varchar(10) NOT NULL COMMENT '관측 주기 - Yearly, Monthly, Daily',
+  `INDEX_NAME` varchar(100) DEFAULT NULL COMMENT '지표 명',
+  `VAL` DECIMAL(10,3) DEFAULT NULL COMMENT '값',
+  PRIMARY KEY (`INDEX_ID`, `OBS_TIME`,`FREQ_TYPE` )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
