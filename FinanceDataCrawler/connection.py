@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas import DataFrame
 from sqlalchemy import create_engine
 
 engine = create_engine('mysql+pymysql://volphie:jjo12345@localhost/stockanalysis?charset=utf8')
@@ -12,6 +13,18 @@ def query_stock_tickers():
 def query_stock_prices(ticker, year):
     
     sql = "select TR_DATE, CLOSE_PRICE from stock_price where TICKER = {0} and year(TR_DATE) = '{1}'".format(ticker, year)
-    
     return pd.read_sql_query(sql, engine)
+
+
+def insert_macro_economic_index(data_dic):
+
+    df = DataFrame(data_dic)
+    df.to_sql('macro_economic_index', engine, if_exists='append', index=False)
     
+    
+def query_macro_economic_index(index_cd, start, end, freq ='Monthly'):
+    
+    sql = 'select OBS_TIME, VAL from macro_economic_index'\
+          ' where INDEX_ID = \'{0}\' and FREQ_TYPE = \'{1}\''\
+          ' and OBS_TIME between \'{2}-{3}-01\' and \'{4}-{5}-01\' '.format(index_cd, freq, start[0:4], start[4:6], end[0:4], end[4:6])
+    return pd.read_sql_query(sql, engine)
