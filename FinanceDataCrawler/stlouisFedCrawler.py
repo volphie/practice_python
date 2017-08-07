@@ -1,7 +1,7 @@
 import requests
 import matplotlib.pyplot as plt
 from test.datetimeTest import datetime_from_millis
-from connection import engine
+from connection import insert_macro_economic_index
 from pandas import DataFrame
 
 def get_stlouisfed_data(index_id, freq='Monthly'):
@@ -22,21 +22,11 @@ def get_stlouisfed_data(index_id, freq='Monthly'):
 
 def save_slouisfed_data(index_id, idName, freq):
     
-#     id = 'T10Y2Y'   # Interest rate spread
-    
     #get data
     time_series, values = get_stlouisfed_data(index_id, freq)
     
-#     time_series = [time_series.strftime('%Y%m') for month in months]
-    
-    df = DataFrame({'OBS_TIME': time_series, 'VAL': values})
-    df.insert(0,'INDEX_ID', index_id)
-    df.insert(2,'FREQ_TYPE', freq)
-    df.insert(3,'INDEX_NAME', idName)
-    
-    print(df)
-    df.to_sql('macro_economic_index', engine, if_exists='append', index=False)
-    
+    data_dic = {'INDEX_ID':index_id, 'OBS_TIME': time_series, 'FREQ_TYPE' : freq, 'INDEX_NAME' : idName, 'VAL': values }
+    insert_macro_economic_index(data_dic)
 
 # # WTI crude oil
 # url = 'https://fred.stlouisfed.org/graph/graph-data.php?mode=fred&id=DCOILWTICO'

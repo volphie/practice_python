@@ -59,6 +59,7 @@ def get_finstate_naver(code, fin_type='0', freq_type='Y'):
     df.set_index('date', inplace=True)
 
     cols = list(df.columns)
+    print(cols)
 
     if '연간' in cols: cols.remove('연간')
     if '분기' in cols: cols.remove('분기')
@@ -68,6 +69,9 @@ def get_finstate_naver(code, fin_type='0', freq_type='Y'):
     cols = cols[:-1]
 
     df = df.ix[:, :-1]
+    
+#     print(df)
+    
     df.columns = cols
     dft = df.T
     dft.index = pd.to_datetime(dft.index)
@@ -83,8 +87,69 @@ def get_finstate_naver(code, fin_type='0', freq_type='Y'):
     # Add 종목코드 column to the table
     dft.insert(0,'종목코드', code)
     
-    #print(dft)
+#     print(dft)
     return dft
+
+def get_finstate_naver2(code, fin_type='0', freq_type='Y'):
+    url_tmpl = 'http://companyinfo.stock.naver.com/v1/company/ajax/cF1001.aspx?' \
+    'cmp_cd=%s&fin_typ=%s&freq_typ=%s'
+    
+    url = url_tmpl % (code, fin_type, freq_type)
+    #print(url)
+
+    dfs = pd.read_html(url, encoding="utf-8")
+    df = dfs[0]
+    if df.ix[0,0].find('해당 데이터가 존재하지 않습니다') >= 0:
+        return None
+
+    cols = list(df.columns)
+    print(cols)
+    
+#     df.rename(columns={'주요재무정보':'date'}, inplace=True)
+#     df.set_index('date', inplace=True)
+ 
+    cols = list(df.columns)
+    print(cols)
+
+#     if '연간' in cols: cols.remove('연간')
+#     if '분기' in cols: cols.remove('분기')
+    cols = [get_date_str(x) for x in cols]
+
+    # This line is attached to the original source
+#     cols = cols[:-1]
+    cols.insert(0,'date')
+    cols = cols[:-1]
+    print(cols)
+
+#     df = df.ix[:, :-1]
+        
+    df.columns = cols
+    print(df)
+    
+    dft = df.T
+    
+    print(dft.index)
+#     dft.index = pd.to_datetime(dft.index)
+
+    # These lines are attached to the original source
+    cols = list(dft.columns)
+#     cols = [get_col_str(x) for x in cols]
+    dft.columns = cols
+    #dft.set_index('date', inplace=True)
+    
+    dft=dft.ix[1:,:]
+    dft.index = pd.to_datetime(dft.index)
+
+    # remove if index is NaT
+    dft = dft[pd.notnull(dft.index)]
+    # Add 종목코드 column to the table
+    dft.insert(0,'종목코드', code)
+    
+    print(dft)
+#     print(dft)
+    return dft
+
+
 
 '''
 @ Arguments
@@ -107,34 +172,20 @@ def save_to_financial_index_table(df):
           'ROE' , 'ROA' , 'DEBT_RATIO' , 'RESERVE_RATIO' , 'EPS', 'PER', 'BPS', 'PBR', 'DPS', 'DPSP', 'PROP_TO_DIV' , 'NO_OF_STOCKS']
     df.columns = cols
     df.insert(0, 'FIN_YEAR', df.index)
-#     print(df)
+    print(df)
     df.to_sql('financial_index', engine, if_exists='append', index=False)
 
 
-# path = Path(os.getcwd()+'\data\krx_stock_list.csv')
-# print(path)
-# Read stock ticker
-# df = pd.read_csv(os.getcwd()+'\data\krx_stock_list.csv', dtype=object)
-# cols = df['종목코드']
-# print(cols)
-# i = 0
-# for ticker in cols:
-#     # Query financial information by stock ticker and save to each file named after the ticker
-#     dfa = get_finstate_naver(ticker)
-#     i = i + 1
-# # print(dfa)
-# # result_file =
-# # print(result_file)
-#     dfa.to_csv('{0}\\result\{1}.csv'.format(os.getcwd(), ticker))
-#     print('{0}. {1}.csv file was saved'.format(i, ticker))
-#     load_file_to_financial_index_table(ticker)
+
 df = query_stock_tickers()
 for index, row in df.iterrows() :
     try:
-        data = get_finstate_naver(row['TICKER'])
+        data = get_finstate_naver2(row['TICKER'])
         save_to_financial_index_table(data)
         print("{0}. {1} is saved to the table financial_index ...".format(index, row['TICKER']))
     except :
         print("[Exception] Error occurs during handling {0}'s financial index data".format(row['TICKER']))
         pass
-# save_to_financial_index_table('000020')
+
+# data = get_finstate_naver2('000020')
+# save_to_financial_index_table(data)
