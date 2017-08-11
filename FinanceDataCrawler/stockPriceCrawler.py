@@ -28,7 +28,7 @@ def save_stock_price_to_db(ticker, market, yesterday=False):
       'q': ticker,  # Stock symbol (ex: "AAPL")
       'i': "86400",  # Interval size in seconds ("86400" = 1 day intervals)
       'x': "KRX" if market =='KOSPI' else "KOSDAQ",  # Stock exchange symbol on which stock is traded (ex: "KRX" for KOSPI)
-      'p': "10Y"  # Period (Ex: "1Y" = 1 year)
+      'p': "20Y"  # Period (Ex: "1Y" = 1 year)
     }
     
 #     print(param)
@@ -51,12 +51,12 @@ def save_stock_price_to_db(ticker, market, yesterday=False):
 * Select * from stock_ticker
 * return the result as a form of DataFrame
 '''
-df = query_stock_tickers()
-for index, row in df.iterrows() :
-    try:
-        save_stock_price_to_db(row['TICKER'],row['MARKET'])
-        print("{0} is saved to the table...".format(row['TICKER']))
-    except :
-        print("[Exception] Error occurs during handling {0}".format(row['TICKER']))
-        pass
-# save_stock_price_to_db('000070',market='KOSPI', yesterday=True)
+# df = query_stock_tickers()
+# for index, row in df.iterrows() :
+#     try:
+#         save_stock_price_to_db(row['TICKER'],row['MARKET'])
+#         print("{0} is saved to the table...".format(row['TICKER']))
+#     except :
+#         print("[Exception] Error occurs during handling {0}".format(row['TICKER']))
+#         pass
+save_stock_price_to_db('002300',market='KOSPI', yesterday=False)

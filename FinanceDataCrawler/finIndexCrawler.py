@@ -173,19 +173,19 @@ def save_to_financial_index_table(df):
     df.columns = cols
     df.insert(0, 'FIN_YEAR', df.index)
     print(df)
-    df.to_sql('financial_index', engine, if_exists='append', index=False)
+#     df.to_sql('financial_index', engine, if_exists='append', index=False)
 
 
+# 
+# df = query_stock_tickers()
+# for index, row in df.iterrows() :
+#     try:
+#         data = get_finstate_naver2(row['TICKER'])
+#         save_to_financial_index_table(data)
+#         print("{0}. {1} is saved to the table financial_index ...".format(index, row['TICKER']))
+#     except :
+#         print("[Exception] Error occurs during handling {0}'s financial index data".format(row['TICKER']))
+#         pass
 
-df = query_stock_tickers()
-for index, row in df.iterrows() :
-    try:
-        data = get_finstate_naver2(row['TICKER'])
-        save_to_financial_index_table(data)
-        print("{0}. {1} is saved to the table financial_index ...".format(index, row['TICKER']))
-    except :
-        print("[Exception] Error occurs during handling {0}'s financial index data".format(row['TICKER']))
-        pass
-
-# data = get_finstate_naver2('000020')
-# save_to_financial_index_table(data)
+data = get_finstate_naver2('001720')
+save_to_financial_index_table(data)
