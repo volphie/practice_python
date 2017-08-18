@@ -4,11 +4,16 @@ Created on 2017. 8. 11.
 @author: P116402
 '''
 
-import connection
+import connection as con
 import numpy as np
+from matplotlib import font_manager, rc
 import matplotlib.pyplot as plt
 
-df = connection.query_eps_and_bps('002300')
+ticker = '002300'
+ticker_name = con.query_ticker_name(ticker)
+
+
+df = con.query_eps_and_bps(ticker)
 print(df)
 
 eps = list(df['EPS'])
@@ -27,13 +32,18 @@ df['IV'] = iv
 df['YEAR'] = [x.strftime('%Y') for x in df['FIN_YEAR']]
 print(df)
 
-df2 = connection.query_stock_prices_after('002300', '2015-01-01')
+df2 = con.query_stock_prices_after(ticker, '2015-01-01')
 df2['YEAR'] = [x.strftime('%Y') for x in df2['TR_DATE']]
 print(df2)
 
 df2['IV'] = [df.loc[df['YEAR'] == x]['IV'].values[0] for x in df2['YEAR']]
 print(df2)
 
+# 한글 사용을 위한 font 선택
+font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/malgun.ttf").get_name()
+rc('font', family=font_name)
+
+plt.title('Price and Internal Value Spread for {0}({1})'.format(ticker_name, ticker))
 plt.plot(df2['TR_DATE'],df2['CLOSE_PRICE'])
 plt.plot(df2['TR_DATE'],df2['IV'])
 

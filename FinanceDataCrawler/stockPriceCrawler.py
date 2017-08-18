@@ -42,10 +42,10 @@ def save_stock_price_to_db(ticker, market, yesterday=False):
     df.insert(0, 'ticker', ticker)
     # Column labels should be the same with table fields
     df.columns = ['TICKER', 'TR_DATE', 'OPEN_PRICE', 'HIGH_PRICE', 'LOW_PRICE', 'CLOSE_PRICE', 'TR_VOLUME']
-    # print(df)
+    print(df)
     # When using pymysql, connection string should be like this ; mysql+pymysql://...
     #engine = create_engine('mysql+pymysql://volphie:jjo12345@localhost/stockanalysis')
-    df.to_sql('stock_price', engine, if_exists='append', index=False)
+#     df.to_sql('stock_price', engine, if_exists='append', index=False)
 
 '''
 * Select * from stock_ticker
@@ -59,4 +59,4 @@ def save_stock_price_to_db(ticker, market, yesterday=False):
 #     except :
 #         print("[Exception] Error occurs during handling {0}".format(row['TICKER']))
 #         pass
-save_stock_price_to_db('002300',market='KOSPI', yesterday=False)
+save_stock_price_to_db('KOSPI200',market='KOSPI', yesterday=False)

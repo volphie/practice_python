@@ -15,6 +15,11 @@ def query_stock_tickers():
     return pd.read_sql_table('stock_ticker',engine)
 
 
+def query_ticker_name(ticker):
+    
+    sql ="select TICKER_NAME from stock_ticker where TICKER = \'{0}\'".format(ticker)
+    return pd.read_sql_query(sql,engine)['TICKER_NAME'][0]
+
 
 
 '''
