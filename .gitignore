@@ -1,2 +1,5 @@
 *.weights
 *.mp4
+
+# IDE 설정은 ignore...
+.idea/
