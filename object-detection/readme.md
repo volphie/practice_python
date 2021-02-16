@@ -1,5 +1,5 @@
 # Object-Detection
-OpenCV와 Yolov3 모델을 활용한 Obejct-Detection Example 코드
+OpenCV와 Yolov3 모델을 활용한 Obejct-Detection Example 실행해보기
 
 
 ## Source
