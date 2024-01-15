@@ -9,15 +9,15 @@ Created on Tue Feb  9 11:25:12 2021
 import cv2
 import numpy as np
 
-net = cv2.dnn.readNet('yolov3.weights','yolov3.cfg')
+net = cv2.dnn.readNet('./object-detection/yolov3-tiny.weights','./object-detection/yolov3-tiny.cfg')
 
 classes=[]
-with open('coco','r') as f:
+with open('./object-detection/coco','r') as f:
     classes = f.read().splitlines()
 
 print(classes)
 
-img = cv2.imread('image.jpg')
+img = cv2.imread('./object-detection/image.jpg')
 height, width, _ = img.shape
 
 # Normalize the image

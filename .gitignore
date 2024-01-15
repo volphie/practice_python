@@ -4,3 +4,4 @@
 
 # IDE 설정은 ignore...
 .idea/
+.venv/
